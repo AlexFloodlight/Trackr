@@ -132,6 +132,27 @@ var trackr = {
         return this;
     },
     
+    showRecords: function(records) {
+        'use strict';
+        var record_index = 0;
+        records = [
+            {
+                age: "1",
+                name: "",
+                time_end: "2013-05-31 18:04:10",
+                time_start: "2013-05-31 18:02:51"
+            },
+            {
+                age: "921",
+                name: "",
+                time_end: "2013-06-01 09:37:26",
+                time_start: "2013-05-31 18:15:46"
+            }
+        ];
+        
+        console.log(records);
+    },
+    
     buttonAjaxResponse: function(response) {
         'use strict';
         if ( response.time || response.track_id ) {
@@ -147,8 +168,8 @@ var trackr = {
         
         if ( response.type_reponse === 'last_record' ) {
             trackr.createNewInput(response);
-        } else {
-            console.log(response);
+        } else if ( response.records.length > 0 ) {
+            trackr.showRecords(response.records);
         }
     },
     ajaxFinish: function() {
@@ -174,4 +195,5 @@ var trackr = {
 jQuery(function() {
     'use strict';
     trackr.init();
+    trackr.showRecords();
 });

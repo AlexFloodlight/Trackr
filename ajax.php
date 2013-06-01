@@ -51,7 +51,7 @@ switch ($_POST['action']) {
 				'time' => time()
 			);
 		} else {
-			$records = $db->query_list_object("SELECT * FROM `records` WHERE `user_id` = 1");	
+			$records = $db->query_list_object("SELECT `time_start`, `time_end`, `name`, TIMESTAMPDIFF(MINUTE, `time_start`, `time_end`) as age FROM `records` WHERE `user_id` = 1 AND TIMESTAMPDIFF(MINUTE, `time_start`, `time_end`) > 0");	
 			
 			$result = array(
 				'success' => true,
