@@ -26,6 +26,15 @@ switch ($_POST['action']) {
 			'success' => true,
 		);
 		break;
+	case 'finish' :
+		$last_record = $db->query_list_object("SELECT `id` FROM records WHERE `user_id` = 1 AND `time_end` IS NULL");
+		$db->query("UPDATE records SET `time_end` = NOW() WHERE `user_id` = 1 AND `time_end` IS NULL");
+		$result = array(
+			'success' => true,
+			'track_id' => intval($last_record[0]->id), 
+			'time' => time()
+		);
+		break;
 }
 
 header( "Content-Type: application/json" );

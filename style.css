@@ -3,8 +3,8 @@ body {
 }
 
 .wrap {
-	min-width: 320px;
-	width: 100%;
+	width: 200px;
+	margin: 0 auto;
 }
 
 #the-button {
@@ -108,4 +108,18 @@ h2 {
 }
 #list-tasks .okay.done {
 	color: #07b530;
+}
+
+#button-finish {
+	width: 80px;
+	height: 30px;
+	margin: 0 auto;
+	background: #07B530;
+	text-align: center;
+	
+	line-height: 30px;
+	font-weight: 700;
+	color: #FFFFFF;
+	border-radius: 8px;
+	cursor: pointer;
 }

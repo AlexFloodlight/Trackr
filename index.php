@@ -15,6 +15,7 @@
 		</div>
 		<h2>What did you do at:</h2>
 		<ul id="list-tasks"></ul>
+		<div id="finished"></div>
 	</div>
 </body>
 
