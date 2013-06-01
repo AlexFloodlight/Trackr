@@ -65,17 +65,29 @@ var trackr = {
         this.jq_ok = jq_li.find('.okay');
         this.jq_form = jq_li.find('form');
         this.jq_input = jq_li.find('input[type="text"]');
+        this.FADE_TIME = 250;
         
         this.jq_form.submit(function() {
-            trackr.ajax({action: 'name', id: that.jq_input.attr('name'), name: that.jq_input.val()}, function(response) {
-                that.finish();
-            });
-            return false;
+            that.submit();
+        });
+        this.jq_ok.click(function() {
+            that.submit();
         });
         
+        trackr.NamingField.prototype.submit = function() {
+            if (that.jq_input.val() !== '') {
+                trackr.ajax({action: 'name', id: that.jq_input.attr('name'), name: that.jq_input.val()}, function(response) {
+                    that.finish();
+                });
+            }
+            return false;
+        };
         trackr.NamingField.prototype.finish = function() {
             that.jq_ok.addClass('done');
-            console.log('done!');
+            setTimeout(that.remove, 250);
+        };
+        trackr.NamingField.prototype.remove = function() {
+            that.jq_li.fadeOut(that.FADE_TIME);
         };
         
         return this;
