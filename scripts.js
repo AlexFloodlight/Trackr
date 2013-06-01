@@ -25,7 +25,7 @@ var trackr = {
         this.jq_button = jq_button;
         
         this.jq_button.click(function() {
-            trackr.ajax({action: 'button'}, trackr.createNewInput);
+            trackr.ajax({action: 'button'}, trackr.buttonAjaxResponse);
         });
     },
     
@@ -132,8 +132,24 @@ var trackr = {
         return this;
     },
     
+    buttonAjaxResponse: function(response) {
+        'use strict';
+        if ( response.time || response.track_id ) {
+            trackr.createNewInput(response);
+        }
+    },
+    
     finish: function(response) {
-        console.log(response);
+        'use strict';
+        var not_ready;
+        
+        trackr.removeFinishButton();
+        
+        if ( response.type_reponse === 'last_record' ) {
+            trackr.createNewInput(response);
+        } else {
+            console.log(response);
+        }
     },
     ajaxFinish: function() {
         'use strict';
