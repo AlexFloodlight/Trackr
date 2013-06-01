@@ -1,9 +1,16 @@
 var trackr = {
+    SEL_LIST_TASKS: '#list-tasks',
+    SEL_THE_BUTTON: '#the-button',
+    
+    jq_list_tasks: {},
+    
     init: function() {
         'use strict';
         var jQuery = window.jQuery, the_button;
         
-        the_button = new trackr.TheButton(jQuery('#the-button'));
+        trackr.jq_list_tasks = jQuery(trackr.SEL_LIST_TASKS);
+        
+        the_button = new trackr.TheButton(jQuery(trackr.SEL_THE_BUTTON));
     },
     
     TheButton: function( jq_button ) {
@@ -19,13 +26,64 @@ var trackr = {
     
     createNewInput: function(response) {
         'use strict';
-        var jQuery = window.jQuery, new_form;
-        new_form = jQuery('<div><input type="text" name="' + response.track_id + '" value="' + response.track_id + '" placeholder="At " /><div class="okay icon-ok">&nbsp;</div></div>');
-        jQuery('#list-tasks').append(new_form);
+        var jQuery = window.jQuery, 
+        new_form, 
+        time, 
+        time_str, 
+        hours,
+        minutes,
+        meridiem,
+        field;
+        
+        time = new Date(response.time * 1000);
+        
+        hours = time.getHours();
+        
+        meridiem = 'am';
+        if (hours > 12) {
+            hours = hours - 12;
+            meridiem = 'pm';
+        }
+        
+        minutes = time.getMinutes();
+        
+        if (minutes < 10) {
+            minutes = '0' + minutes;
+        }
+        
+        time_str = hours + ':' + minutes + ' ' + meridiem;
+        
+        new_form = jQuery('<li><form><input type="text" name="' + response.track_id + '" placeholder="At ' + time_str + '" /><div class="okay icon-ok">&nbsp;</div><input type="submit" /></form></li>');
+        field = new trackr.NamingField(new_form);
+        trackr.jq_list_tasks.append(new_form);
+    },
+    
+    NamingField: function( jq_li ) {
+        'use strict';
+        var that = this, console = window.console;
+        this.jq_li = jq_li;
+        this.jq_ok = jq_li.find('.okay');
+        this.jq_form = jq_li.find('form');
+        this.jq_input = jq_li.find('input[type="text"]');
+        
+        this.jq_form.submit(function() {
+            trackr.ajax({action: 'name', id: that.jq_input.attr('name'), name: that.jq_input.val()}, function(response) {
+                that.finish();
+            });
+            return false;
+        });
+        
+        trackr.NamingField.prototype.finish = function() {
+            that.jq_ok.addClass('done');
+            console.log('done!');
+        };
+        
+        return this;
     },
     
     ajax: function(data, callback) {
         'use strict';
+        var jQuery = window.jQuery;
         jQuery.post(
             '/ajax.php', 
             data,
@@ -39,13 +97,6 @@ var trackr = {
 };
 
 jQuery(function() {
+    'use strict';
     trackr.init();
-    
-    jQuery('body').on("click", '.okay', function() {
-        var button =  jQuery(this);
-        trackr.ajax({action: 'name', name: 'test'}, function(response) {
-            button.addClass('done');
-            console.log(response);
-        });
-    });
 });

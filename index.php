@@ -14,11 +14,7 @@
 			<div class="inner grad">Push Me!</div>
 		</div>
 		<h2>What did you do at:</h2>
-		<ul id="list-tasks">
-			<li>
-				<input type="text" placeholder="At 3:00 pm" /><div class="okay icon-ok">&nbsp;</div>
-			</li>
-		</ul>
+		<ul id="list-tasks"></ul>
 	</div>
 </body>
 

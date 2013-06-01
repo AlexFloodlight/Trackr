@@ -33,6 +33,13 @@ body {
 	cursor: pointer;
 	
 	transition: box-shadow 150ms;
+	
+	-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
 }
 
 #the-button:active {
@@ -87,7 +94,9 @@ h2 {
 	vertical-align: bottom;
 	width: 170px;
 }
-
+#list-tasks input[type="submit"] {
+	display: none;
+}
 #list-tasks .okay {
 	height: 20px;
 	width: 20px;
