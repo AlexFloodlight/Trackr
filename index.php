@@ -4,10 +4,22 @@
 <title>Trackr</title>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.0/jquery.min.js"></script>
 <script src="scripts.js"></script>
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="icons.css" />
 </head>
 
 <body>
-<div id="the-button">Push Me!</div>
+	<div class="wrap">
+		<div id="the-button">
+			<div class="inner grad">Push Me!</div>
+		</div>
+		<h2>What did you do at:</h2>
+		<ul id="list-tasks">
+			<li>
+				<input type="text" placeholder="At 3:00 pm" /><div class="okay icon-ok">&nbsp;</div>
+			</li>
+		</ul>
+	</div>
 </body>
 
 </html>
