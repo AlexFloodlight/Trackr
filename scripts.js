@@ -134,23 +134,30 @@ var trackr = {
     
     showRecords: function(records) {
         'use strict';
-        var record_index = 0;
-        records = [
-            {
-                age: "1",
-                name: "",
-                time_end: "2013-05-31 18:04:10",
-                time_start: "2013-05-31 18:02:51"
-            },
-            {
-                age: "921",
-                name: "",
-                time_end: "2013-06-01 09:37:26",
-                time_start: "2013-05-31 18:15:46"
-            }
-        ];
+        var record_index = records.length, 
+        jQuery = window.jQuery, 
+        this_record,
+        hours,
+        minutes,
+        time_start,
+        time_end,
+        this_record_data;
         
-        console.log(records);
+        while (record_index--) {
+            this_record_data = records[record_index];
+            hours = Math.floor(this_record_data.age / 60);
+            minutes = this_record_data.age - (hours * 60);
+            time_start = new Date(this_record_data.time_start);
+            time_end = new Date(this_record_data.time_end);
+            
+            if (minutes < 10) {
+                minutes = '0' + minutes;
+            }
+            
+            console.log(hours, minutes, time_start, time_end, this_record_data.name);
+            this_record = jQuery('<li>' + hours + ':' + minutes + ' - ' + this_record_data.name + '</li>');
+            jQuery('#records').append(this_record);
+        }
     },
     
     buttonAjaxResponse: function(response) {
@@ -195,5 +202,18 @@ var trackr = {
 jQuery(function() {
     'use strict';
     trackr.init();
-    trackr.showRecords();
+    trackr.showRecords([
+            {
+                age: "1",
+                name: "Short",
+                time_end: "2013-05-31 18:04:10",
+                time_start: "2013-05-31 18:02:51"
+            },
+            {
+                age: "921",
+                name: "Long",
+                time_end: "2013-06-01 09:37:26",
+                time_start: "2013-05-31 18:15:46"
+            }
+        ]);
 });
