@@ -1,4 +1,5 @@
 <?php
+global $db;
 
 define( 'DB_HOST', 'localhost' );
 define( 'DB_USER', 'root' );
@@ -9,8 +10,41 @@ require_once ( 'mysqli.php' );
 
 $db = new sqli_database(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
-switch ($_POST['action']) {
-	case 'button' :
+class AjaxResponse {
+	private $_commands = array();
+	
+	public $result;
+	
+	public function addCommand( $cmd ) {
+		$this->_commands[] = $cmd;
+	}
+	
+	public function runCommand( $name ) {
+		foreach( $this->_commands as $cmd ) {
+			if ($this->result = $cmd->onCommand( $name )) {
+				return;
+			}
+		}
+	}
+	
+	public function printResponse() {
+		header( "Content-Type: application/json" );
+		echo json_encode($this->result);
+		exit;
+	}
+}
+
+class TrackrActions {
+	public function onCommand( $name ) {
+		if (method_exists(get_class(), $name)) {
+			return $this->$name();
+		} else {
+			return false;
+		}
+	}
+	
+	public function button() {
+		global $db;
 		$last_record = $db->query_list_object("SELECT `id` FROM records WHERE `user_id` = 1 AND `time_end` IS NULL");
 		
 		$db->query("UPDATE records SET `time_end` = NOW() WHERE `user_id` = 1 AND `time_end` IS NULL");
@@ -27,14 +61,20 @@ switch ($_POST['action']) {
 				'time' => time()
 			);
 		}
-		break;
-	case 'name' :
+		return $result;
+	}
+	
+	public function name() {
+		global $db;
 		$db->query("UPDATE records SET `name` = '{$_POST['name']}' WHERE `user_id` = 1 AND `id` = '{$_POST['id']}'");
 		$result = array(
 			'success' => true,
 		);
-		break;
-	case 'finish' :
+		return $result;
+	}
+	
+	public function finish() {
+		global $db;
 		$last_record = $db->query_list_object("SELECT `id` FROM records WHERE `user_id` = 1 AND `time_end` IS NULL");
 		
 		$db->query("UPDATE records SET `time_end` = NOW() WHERE `user_id` = 1 AND `time_end` IS NULL");
@@ -59,9 +99,11 @@ switch ($_POST['action']) {
 				'records' => $records
 			);
 		}
-		break;
+		return $result;
+	}
 }
 
-header( "Content-Type: application/json" );
-echo json_encode($result);
-exit;	
+$ajax_response = new AjaxResponse();
+$ajax_response->addCommand( new TrackrActions );
+$ajax_response->runCommand($_POST['action']);
+$ajax_response->printResponse();
