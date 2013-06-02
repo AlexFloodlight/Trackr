@@ -27,6 +27,11 @@
 			</table>
 		</div>
 	</div>
+	<audio id="audio-pop">
+		<source src="audio/pop.mp3"></source>
+		<source src="audio/pop.ogg"></source>
+		<source src="audio/pop.wav"></source>
+	</audio>
 </body>
 
 </html>

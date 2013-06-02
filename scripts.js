@@ -10,16 +10,28 @@ var trackr = {
     jq_finish_button: {},
     jq_records: {},
     
+    audio: {},
+    
     init: function() {
         'use strict';
-        var jQuery = window.jQuery, the_button, finish_button;
+        var jQuery = window.jQuery, 
+        the_button, 
+        finish_button;
         
         trackr.jq_list_tasks = jQuery(trackr.SEL_LIST_TASKS);
         trackr.jq_finished = jQuery(trackr.SEL_FINISHED);
         trackr.jq_naming_label = jQuery('h2');
         trackr.jq_records = jQuery(trackr.SEL_RECORDS);
         
+        trackr.audio = document.getElementById('audio-pop');
+        
         the_button = new trackr.TheButton(jQuery(trackr.SEL_THE_BUTTON));
+    },
+    
+    playPop: function() {
+        'use strict';
+        
+        trackr.audio.play();
     },
     
     TheButton: function( jq_button ) {
@@ -30,6 +42,7 @@ var trackr = {
         
         this.jq_button.click(function() {
             trackr.ajax({action: 'button'}, trackr.buttonAjaxResponse);
+            trackr.playPop();
         });
     },
     
