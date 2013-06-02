@@ -54,7 +54,7 @@ var trackr = {
         
         this.jq_button = jq_button;
         
-        this.jq_button.click(function() {
+        this.jq_button.click(function clickHandler() {
             trackr.ajax({action: 'button'}, trackr.buttonAjaxResponse);
             trackr.playPop();
         });
@@ -81,7 +81,7 @@ var trackr = {
         var jQuery = window.jQuery;
         
         if (trackr.jq_finish_button.length > 0) {
-            trackr.jq_finish_button.fadeOut(250, function() {
+            trackr.jq_finish_button.fadeOut(250, function afterFade() {
                 trackr.jq_finish_button.remove();
             });
         }
@@ -140,30 +140,30 @@ var trackr = {
         this.jq_input = jq_li.find('input[type="text"]');
         this.FADE_TIME = 250;
         
-        this.jq_form.submit(function() {
+        this.jq_form.submit(function formSubmitHandler() {
             that.submit();
             return false;
         });
-        this.jq_ok.click(function() {
+        this.jq_ok.click(function okClickHandler() {
             that.submit();
         });
         
-        trackr.NamingField.prototype.submit = function() {
+        trackr.NamingField.prototype.submit = function submit() {
             var that = this;
             if (that.jq_input.val() !== '') {
-                trackr.ajax({action: 'name', id: that.jq_input.attr('name'), name: that.jq_input.val()}, function(response) {
+                trackr.ajax({action: 'name', id: that.jq_input.attr('name'), name: that.jq_input.val()}, function respondToAJAX(response) {
                     that.finish();
                 });
             }
         };
-        trackr.NamingField.prototype.finish = function() {
+        trackr.NamingField.prototype.finish = function finish() {
             var that = this;
             that.jq_ok.addClass('done');
             setTimeout(that.remove(), 250);
         };
-        trackr.NamingField.prototype.remove = function() {
+        trackr.NamingField.prototype.remove = function remove() {
             var that = this;
-            that.jq_li.fadeOut(that.FADE_TIME, function() {
+            that.jq_li.fadeOut(that.FADE_TIME, function afterInputFade() {
                 that.jq_li.remove();
                 trackr.createFinishButton();
                 trackr.setFocus();
@@ -240,7 +240,7 @@ var trackr = {
         this.jq_popup = jQuery('<div>' + message + '<div class="close">&times;</div></div>').hide();
         this.jq_close = this.jq_popup.find('.close');
         
-        this.jq_close.click(function() {
+        this.jq_close.click(function clickHandler() {
             that.close();
         });
         
@@ -256,7 +256,7 @@ var trackr = {
         trackr.Popup.prototype.close = function close() {
             var that = this;
             trackr.jq_bg_popups.fadeOut(this.TIME_FADE);
-            this.jq_popup.fadeOut(this.TIME_FADE, function() {
+            this.jq_popup.fadeOut(this.TIME_FADE, function afterFade() {
                 that.remove();
             });
         };
@@ -289,11 +289,11 @@ var trackr = {
         this.DELAY = 1500;
         
         this.jq_message = jQuery('<div>' + message + '</div>').hide();
-        this.jq_message.click(function() {
+        this.jq_message.click(function clickHandler() {
             that.close();
         });
         
-        this.timer = setTimeout(function() {
+        this.timer = setTimeout(function messageDelay() {
             that.close();
         }, this.DELAY);
         
@@ -303,7 +303,7 @@ var trackr = {
         };
         trackr.Message.prototype.close = function close() {
             var that = this;
-            this.jq_message.fadeOut(this.TIME_FADE, function() {
+            this.jq_message.fadeOut(this.TIME_FADE, function afterFade() {
                 that.remove();
             });
         };
