@@ -10,12 +10,12 @@ body {
 #the-button {
 	position: relative;
 	left: 0;
-	top: 10px;
+	top: 12px;
 	
-	width: 186px;
+	width: 180px;
 	height: 80px;
 
-	margin: 0px auto 10px;
+	margin: 50px auto 10px;
 
 	color: #ffffff;
 	font-size: 40px;
@@ -35,11 +35,11 @@ body {
 	transition: box-shadow 150ms;
 	
 	-webkit-touch-callout: none;
--webkit-user-select: none;
--khtml-user-select: none;
--moz-user-select: none;
--ms-user-select: none;
-user-select: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 #the-button:active {
@@ -52,7 +52,7 @@ user-select: none;
 	left: -10px;
 	top: -20px;
 	
-	width: 200px;
+	width: 194px;
 	height: 94px;
 
 	border: 3px solid rgb(155,6,24);
@@ -218,4 +218,22 @@ h2 {
 }
 #popups > div .close:hover {
 	background: #DFDFDF;
+}
+
+#messages > div {
+	position: fixed;
+	z-index: 100;
+	background: rgba(255, 255, 255, .9);
+	
+	width: 180px;
+	padding: 10px;
+	
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	
+	left: 50%;
+	top: 10px;
+	margin-left: -100px;
+	cursor: pointer;
 }

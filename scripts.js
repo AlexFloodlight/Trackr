@@ -6,6 +6,7 @@ var trackr = {
     SEL_RECORDS: '#records',
     SEL_POPUPS: '#popups',
     SEL_BG_POPUPS: '#bg-popups',
+    SEL_MESSAGES: '#messages',
 
     popups: [],
     
@@ -15,6 +16,7 @@ var trackr = {
     jq_records: {},
     jq_popups: {},
     jq_bg_popups: {},
+    jq_messages: {},
     
     audio: {},
     
@@ -31,15 +33,13 @@ var trackr = {
         trackr.jq_records = jQuery(trackr.SEL_RECORDS);
         trackr.jq_popups = jQuery(trackr.SEL_POPUPS);
         trackr.jq_bg_popups = jQuery(trackr.SEL_BG_POPUPS);
+        trackr.jq_messages = jQuery(trackr.SEL_MESSAGES);
         
         trackr.jq_bg_popups.click(trackr.closePopups);
         
         trackr.audio = document.getElementById('audio-pop');
         
         the_button = new trackr.TheButton(jQuery(trackr.SEL_THE_BUTTON));
-        
-        welcome_message = new trackr.Popup('welcome');
-        welcome_message.add();
     },
     
     playPop: function() {
@@ -264,6 +264,7 @@ var trackr = {
             this.jq_popup.remove();
         };
         
+        this.add();
         trackr.popups.push(this);
         
         return this;
@@ -278,16 +279,58 @@ var trackr = {
         }
     },
     
+    Message: function( message ) {
+        'use strict';
+        var that = this,
+        jQuery = window.jQuery;
+        
+        this.message = message;
+        this.TIME_FADE = 250;
+        this.DELAY = 1500;
+        
+        this.jq_message = jQuery('<div>' + message + '</div>').hide();
+        this.jq_message.click(function() {
+            that.close();
+        });
+        
+        this.timer = setTimeout(function() {
+            that.close();
+        }, this.DELAY);
+        
+        trackr.Message.prototype.add = function add() {
+            trackr.jq_messages.append(this.jq_message);
+            this.jq_message.fadeIn(this.TIME_FADE);
+        };
+        trackr.Message.prototype.close = function close() {
+            var that = this;
+            this.jq_message.fadeOut(this.TIME_FADE, function() {
+                that.remove();
+            });
+        };
+        trackr.Message.prototype.remove = function remove() {
+            this.jq_message.remove();
+        };
+        
+        this.add();
+        
+        return this;
+    },
+    
     buttonAjaxResponse: function(response) {
         'use strict';
+        var message;
+        
         if ( response.time || response.track_id ) {
             trackr.createNewInput(response);
+        } else {
+            message = new trackr.Message('Started');
         }
     },
     
     finish: function(response) {
         'use strict';
-        var not_ready;
+        var not_ready,
+        popup;
         
         trackr.removeFinishButton();
         
@@ -296,6 +339,8 @@ var trackr = {
         } else if ( response.type_response ) {
             if ( response.records.length > 0 ) {
                 trackr.showRecords(response.records);
+            } else {
+                popup = new trackr.Popup('<p>All of your tracked times were less than a minute.</p><p>Slow down next time!</p>');
             }
         }
     },
@@ -321,6 +366,7 @@ var trackr = {
 
 jQuery(function() {
     'use strict';
+    var message;
     
     trackr.init();
 });

@@ -34,6 +34,7 @@
 	</audio>
 	<div id="bg-popups"></div>
 	<div id="popups"></div>
+	<div id="messages"></div>
 </body>
 
 </html>
