@@ -73,6 +73,7 @@ user-select: none;
 }
 
 h2 {
+	display: none;
 	font-size: 21px;
 	width: 200px;
 	margin: 42px auto 12px;
@@ -122,4 +123,36 @@ h2 {
 	color: #FFFFFF;
 	border-radius: 8px;
 	cursor: pointer;
+}
+
+#records {
+	display: none;
+	border-collapse: collapse;
+	border: 1px solid #cccccc;
+	line-height: 20px;
+	font-size: 14px;
+	margin-top: 40px;
+}
+
+#records th, #records td {
+	padding: 6px 12px;
+}
+
+#records thead th {
+	text-align: left;
+	background: #dfdfdf;
+	border-left: 1px solid #cccccc;
+	vertical-align: bottom;
+}
+#records thead th:first-child {
+	border-left: none;
+}
+
+#records tbody td {
+	border-left: 1px solid #cccccc;
+	vertical-align: top;
+}
+
+#records tbody tr.odd td {
+	background: #f3f3f3;
 }

@@ -3,10 +3,12 @@ var trackr = {
     SEL_THE_BUTTON: '#the-button',
     SEL_FINISH: '#button-finish',
     SEL_FINISHED: '#finished',
+    SEL_RECORDS: '#records',
     
     jq_list_tasks: {},
-    
+    jq_naming_label: {},
     jq_finish_button: {},
+    jq_records: {},
     
     init: function() {
         'use strict';
@@ -14,6 +16,8 @@ var trackr = {
         
         trackr.jq_list_tasks = jQuery(trackr.SEL_LIST_TASKS);
         trackr.jq_finished = jQuery(trackr.SEL_FINISHED);
+        trackr.jq_naming_label = jQuery('h2');
+        trackr.jq_records = jQuery(trackr.SEL_RECORDS);
         
         the_button = new trackr.TheButton(jQuery(trackr.SEL_THE_BUTTON));
     },
@@ -87,6 +91,7 @@ var trackr = {
         
         new_form = jQuery('<li><form><input type="text" name="' + response.track_id + '" placeholder="At ' + time_str + '" /><div class="okay icon-ok">&nbsp;</div><input type="submit" /></form></li>');
         field = new trackr.NamingField(new_form);
+        trackr.jq_naming_label.fadeIn();
         trackr.jq_list_tasks.append(new_form);
         trackr.removeFinishButton();
     },
@@ -141,8 +146,32 @@ var trackr = {
         minutes,
         time_start,
         time_end,
-        this_record_data;
+        this_record_data,
+        buildTimeString,
+        jq_records_output = jQuery('');
         
+        buildTimeString = function buildTimeString(date_object) {
+            var hours,
+            minutes,
+            meridiem;
+            
+            hours = date_object.getHours();
+            minutes = date_object.getMinutes();
+            meridiem = 'am';
+            
+            if (hours > 12) {
+                hours = hours - 12;
+                meridiem = 'pm';
+            }
+            
+            if (minutes < 10) {
+                minutes = '0' + minutes;
+            }
+            
+            return hours + ':' + minutes + ' ' + meridiem;
+        };
+        
+        jq_records_output = jQuery('<tbody></tbody>');
         while (record_index--) {
             this_record_data = records[record_index];
             hours = Math.floor(this_record_data.age / 60);
@@ -154,10 +183,14 @@ var trackr = {
                 minutes = '0' + minutes;
             }
             
-            console.log(hours, minutes, time_start, time_end, this_record_data.name);
-            this_record = jQuery('<li>' + hours + ':' + minutes + ' - ' + this_record_data.name + '</li>');
-            jQuery('#records').append(this_record);
+            this_record = jQuery('<tr title="From ' + buildTimeString(time_start) + ' to ' + buildTimeString(time_end) + '"><td>' + hours + ':' + minutes + '</td><td>' + this_record_data.name + '</td></tr>');
+            jq_records_output.prepend(this_record);
         }
+        trackr.jq_records.find('tbody').replaceWith(jq_records_output);
+        
+        trackr.jq_records.find('tbody tr').removeClass('odd').filter(':odd').addClass('odd');
+        
+        trackr.jq_records.fadeIn();
     },
     
     buttonAjaxResponse: function(response) {
@@ -202,18 +235,4 @@ var trackr = {
 jQuery(function() {
     'use strict';
     trackr.init();
-    trackr.showRecords([
-            {
-                age: "1",
-                name: "Short",
-                time_end: "2013-05-31 18:04:10",
-                time_start: "2013-05-31 18:02:51"
-            },
-            {
-                age: "921",
-                name: "Long",
-                time_end: "2013-06-01 09:37:26",
-                time_start: "2013-05-31 18:15:46"
-            }
-        ]);
 });
