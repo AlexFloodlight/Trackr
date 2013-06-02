@@ -32,6 +32,8 @@
 		<source src="audio/pop.ogg"></source>
 		<source src="audio/pop.wav"></source>
 	</audio>
+	<div id="bg-popups"></div>
+	<div id="popups"></div>
 </body>
 
 </html>

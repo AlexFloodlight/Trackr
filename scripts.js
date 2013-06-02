@@ -4,11 +4,17 @@ var trackr = {
     SEL_FINISH: '#button-finish',
     SEL_FINISHED: '#finished',
     SEL_RECORDS: '#records',
+    SEL_POPUPS: '#popups',
+    SEL_BG_POPUPS: '#bg-popups',
+
+    popups: [],
     
     jq_list_tasks: {},
     jq_naming_label: {},
     jq_finish_button: {},
     jq_records: {},
+    jq_popups: {},
+    jq_bg_popups: {},
     
     audio: {},
     
@@ -16,16 +22,24 @@ var trackr = {
         'use strict';
         var jQuery = window.jQuery, 
         the_button, 
-        finish_button;
+        finish_button,
+        welcome_message;
         
         trackr.jq_list_tasks = jQuery(trackr.SEL_LIST_TASKS);
         trackr.jq_finished = jQuery(trackr.SEL_FINISHED);
         trackr.jq_naming_label = jQuery('h2');
         trackr.jq_records = jQuery(trackr.SEL_RECORDS);
+        trackr.jq_popups = jQuery(trackr.SEL_POPUPS);
+        trackr.jq_bg_popups = jQuery(trackr.SEL_BG_POPUPS);
+        
+        trackr.jq_bg_popups.click(trackr.closePopups);
         
         trackr.audio = document.getElementById('audio-pop');
         
         the_button = new trackr.TheButton(jQuery(trackr.SEL_THE_BUTTON));
+        
+        welcome_message = new trackr.Popup('welcome');
+        welcome_message.add();
     },
     
     playPop: function() {
@@ -215,6 +229,55 @@ var trackr = {
         trackr.jq_records.fadeIn();
     },
     
+    Popup: function( message ) {
+        'use strict';
+        var that = this,
+        jQuery = window.jQuery;
+        
+        this.message = message;
+        this.TIME_FADE = 250;
+        
+        this.jq_popup = jQuery('<div>' + message + '<div class="close">&times;</div></div>').hide();
+        this.jq_close = this.jq_popup.find('.close');
+        
+        this.jq_close.click(function() {
+            that.close();
+        });
+        
+        trackr.Popup.prototype.add = function add() {
+            var height;
+            trackr.jq_bg_popups.fadeIn(this.TIME_FADE);
+            trackr.jq_popups.append(this.jq_popup);
+            this.jq_popup.css({
+                'margin-top' : -(this.jq_popup.outerHeight(true) / 2)
+            });
+            this.jq_popup.fadeIn(this.TIME_FADE);
+        };
+        trackr.Popup.prototype.close = function close() {
+            var that = this;
+            trackr.jq_bg_popups.fadeOut(this.TIME_FADE);
+            this.jq_popup.fadeOut(this.TIME_FADE, function() {
+                that.remove();
+            });
+        };
+        trackr.Popup.prototype.remove = function remove() {
+            this.jq_popup.remove();
+        };
+        
+        trackr.popups.push(this);
+        
+        return this;
+    },
+    
+    closePopups: function() {
+        'use strict';
+        var popup_index = trackr.popups.length;
+        
+        while (popup_index--) {
+            trackr.popups[popup_index].close();
+        }
+    },
+    
     buttonAjaxResponse: function(response) {
         'use strict';
         if ( response.time || response.track_id ) {
@@ -258,5 +321,6 @@ var trackr = {
 
 jQuery(function() {
     'use strict';
+    
     trackr.init();
 });
