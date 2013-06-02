@@ -86,7 +86,7 @@ class TrackrActions {
 		if (!empty($last_record)) {
 			$result = array(
 				'success' => true,
-				'type_reponse' => 'last_record',
+				'type_response' => 'last_record',
 				'track_id' => intval($last_record[0]->id), 
 				'time' => time()
 			);
@@ -95,7 +95,7 @@ class TrackrActions {
 			
 			$result = array(
 				'success' => true,
-				'type_reponse' => 'records',
+				'type_response' => 'records',
 				'records' => $records
 			);
 		}

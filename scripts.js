@@ -228,10 +228,12 @@ var trackr = {
         
         trackr.removeFinishButton();
         
-        if ( response.type_reponse === 'last_record' ) {
+        if ( response.type_response === 'last_record' ) {
             trackr.createNewInput(response);
-        } else if ( response.records.length > 0 ) {
-            trackr.showRecords(response.records);
+        } else if ( response.type_response ) {
+            if ( response.records.length > 0 ) {
+                trackr.showRecords(response.records);
+            }
         }
     },
     ajaxFinish: function() {
