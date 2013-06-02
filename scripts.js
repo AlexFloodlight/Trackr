@@ -104,9 +104,17 @@ var trackr = {
         
         new_form = jQuery('<li><form><input type="text" name="' + response.track_id + '" placeholder="At ' + time_str + '" /><div class="okay icon-ok">&nbsp;</div><input type="submit" /></form></li>');
         field = new trackr.NamingField(new_form);
+        
         trackr.jq_naming_label.fadeIn();
         trackr.jq_list_tasks.append(new_form);
+        trackr.setFocus();
+        
         trackr.removeFinishButton();
+    },
+    
+    setFocus: function() {
+        'use strict';
+        trackr.jq_list_tasks.children('li:first-child').find('input[type="text"]').focus();
     },
     
     NamingField: function( jq_li ) {
@@ -144,6 +152,7 @@ var trackr = {
             that.jq_li.fadeOut(that.FADE_TIME, function() {
                 that.jq_li.remove();
                 trackr.createFinishButton();
+                trackr.setFocus();
             });
         };
         
